@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-stone-200 dark:bg-[#282c34] dark:text-white;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply cursor-pointer rounded-md border px-3 py-1;
+  }
+}
