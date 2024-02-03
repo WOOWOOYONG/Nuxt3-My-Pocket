@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
 
 const { userInfo, isLogin } = storeToRefs(useUserStore())
+const { logout } = useUserStore()
 const showUserDropdown = ref(false)
 const toggleUserDropdown = () => {
   showUserDropdown.value = !showUserDropdown.value
@@ -10,12 +11,10 @@ const toggleUserDropdown = () => {
 </script>
 
 <template>
-  <header class="bg-stone-300 py-2 dark:bg-gray-900">
+  <header class="bg-stone-300 py-3 dark:bg-gray-900">
     <nav class="container">
       <div class="flex items-center justify-between">
-        <NuxtLink to="/">
-          <Icon name="pixelarticons:home" size="24" />
-        </NuxtLink>
+        <NuxtLink to="/"> LOGO </NuxtLink>
         <div class="flex items-center gap-3">
           <div v-if="isLogin" class="relative cursor-pointer" @click="toggleUserDropdown">
             <img :src="userInfo.thumbnail" class="w-10 rounded-full" />
@@ -40,6 +39,7 @@ const toggleUserDropdown = () => {
                 <a
                   href="#"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                  @click.prevent="logout"
                   >Sign out</a
                 >
               </div>
@@ -47,6 +47,9 @@ const toggleUserDropdown = () => {
           </div>
           <div v-else>
             <NuxtLink to="/login" class="mr-4"> Start </NuxtLink>
+          </div>
+          <div>
+            <LangSwitcher />
           </div>
           <div>
             <DarkToggle />

@@ -9,7 +9,19 @@
 }
 
 @layer components {
-  .btn {
-    @apply cursor-pointer rounded-md border px-3 py-1;
+  .base-btn {
+    @apply cursor-pointer rounded-md border border-black px-3 py-2 font-medium;
+  }
+  .form-label {
+    @apply mb-2 block text-left text-lg font-medium;
+  }
+  .base-input {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5  text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+  }
+  .base-select {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+  }
+  .base-textarea {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
   }
 }
