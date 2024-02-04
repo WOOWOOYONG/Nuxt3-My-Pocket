@@ -25,7 +25,7 @@ const login = async () => {
     })
     if (res.ok) {
       setUserInfo(res.data)
-      authToken.value = `Bearer ${res.token}`
+      authToken.value = res.token
       isLogin.value = true
       router.push('/')
     }

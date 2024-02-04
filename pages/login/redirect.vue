@@ -16,7 +16,7 @@ const getUserData = async () => {
     const res = await $fetch<ApiResponse<UserData>>(`${apiBaseUrl}/userInfo`, {
       method: 'POST',
       headers: {
-        Authorization: authToken.value
+        Authorization: `Bearer ${authToken.value}`
       }
     })
     if (res.ok) {
@@ -30,7 +30,7 @@ const getUserData = async () => {
 }
 
 onMounted(() => {
-  authToken.value = `Bearer ${route.query.token}` as string
+  authToken.value = route.query.token as string
   getUserData()
 })
 </script>
