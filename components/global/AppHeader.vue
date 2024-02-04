@@ -11,7 +11,7 @@ const toggleUserDropdown = () => {
 </script>
 
 <template>
-  <header class="bg-stone-300 py-3 dark:bg-gray-900">
+  <header class="py-4">
     <nav class="container">
       <div class="flex items-center justify-between">
         <NuxtLink to="/"> LOGO </NuxtLink>

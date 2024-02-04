@@ -1,27 +1,5 @@
 <script lang="ts" setup>
-const restaurants = ref([
-  {
-    name: '麥當勞',
-    id: '1',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  },
-  {
-    name: '麥當勞',
-    id: '2',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  },
-  {
-    name: '麥當勞',
-    id: '3',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  }
-])
+import { type ApiResponse, type Pocket } from '~/types'
 
 const menuList = [
   {
@@ -48,6 +26,20 @@ const togglePostModal = () => {
 const handleClosePostModal = (value: boolean) => {
   showPostModal.value = value
 }
+
+const { apiBaseUrl } = useApiConfig()
+
+const pocketList = ref<null | Pocket[]>(null)
+
+const { data, error } = await useFetch<ApiResponse<Pocket[]>>(`${apiBaseUrl}/pockets`)
+
+if (data.value) {
+  pocketList.value = data.value.data
+}
+
+if (error.value) {
+  console.error(error.value)
+}
 </script>
 
 <template>
@@ -72,9 +64,9 @@ const handleClosePostModal = (value: boolean) => {
         <div class="mb-6 cursor-pointer border border-black py-3 text-xl" @click="togglePostModal">
           新增探險地點
         </div>
-        <ul class="flex flex-col gap-3">
-          <li v-for="restaurant in restaurants" :key="restaurant.id">
-            <PockItem :restaurant="restaurant" />
+        <ul v-if="pocketList" class="flex flex-col gap-3">
+          <li v-for="pocket in pocketList" :key="pocket._id">
+            <PockItem :pocket="pocket" />
           </li>
         </ul>
       </div>

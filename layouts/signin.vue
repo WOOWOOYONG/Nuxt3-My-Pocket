@@ -9,8 +9,8 @@
           <div class="mx-auto max-w-sm">
             <h2 class="mb-14 text-4xl font-bold">My Pocket</h2>
             <div class="mb-6 flex justify-between px-10">
-              <NuxtLink class="block w-1/2 text-xl" to="/login">登入</NuxtLink>
-              <NuxtLink class="block w-1/2 text-xl" to="/signup">註冊</NuxtLink>
+              <NuxtLink class="block w-1/2 text-xl text-stone-500" to="/login">登入</NuxtLink>
+              <NuxtLink class="block w-1/2 text-xl text-stone-500" to="/signup">註冊</NuxtLink>
             </div>
             <slot />
             <ul>
@@ -33,6 +33,6 @@
 </template>
 <style scoped>
 .router-link-active {
-  @apply border-b-2 border-stone-400 pb-2 font-medium;
+  @apply border-b-2 border-stone-400 pb-2 font-medium text-stone-700;
 }
 </style>

@@ -4,8 +4,7 @@ import { useUserStore } from '~/stores/user'
 import { type UserData, type ApiResponse } from '~/types'
 
 const router = useRouter()
-const runtimeConfig = useRuntimeConfig()
-const apiBaseUrl = runtimeConfig.public.apiBaseUrl
+const { apiBaseUrl } = useApiConfig()
 const { isLogin, authToken } = storeToRefs(useUserStore())
 
 definePageMeta({
@@ -22,6 +21,7 @@ const signup = async () => {
     const res = await $fetch<ApiResponse<UserData>>(`${apiBaseUrl}/signup`, {
       method: 'POST',
       body: {
+        userName: userName.value,
         email: email.value,
         password: password.value
       }
@@ -53,7 +53,7 @@ onMounted(() => {
         ref="firstInput"
         v-model="userName"
         type="email"
-        class="base-input"
+        class="base-input pl-8"
         placeholder="使用者名稱"
       />
     </div>
@@ -61,13 +61,13 @@ onMounted(() => {
       <span class="input-icon"
         ><Icon name="material-symbols:mail-outline" size="20" class="text-stone-500"
       /></span>
-      <input v-model="email" type="email" class="base-input" placeholder="電子郵件" />
+      <input v-model="email" type="email" class="base-input pl-8" placeholder="電子郵件" />
     </div>
     <div class="relative mb-2">
       <span class="input-icon"
         ><Icon name="material-symbols:lock-outline" size="20" class="text-stone-500"
       /></span>
-      <input v-model="password" type="password" class="base-input" placeholder="密碼" />
+      <input v-model="password" type="password" class="base-input pl-8" placeholder="密碼" />
     </div>
     <div class="relative mb-2">
       <span class="input-icon"
@@ -76,7 +76,7 @@ onMounted(() => {
       <input
         v-model="checkPassword"
         type="password"
-        class="base-input"
+        class="base-input pl-8"
         placeholder="再次輸入密碼"
       />
     </div>

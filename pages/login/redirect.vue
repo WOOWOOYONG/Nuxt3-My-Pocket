@@ -4,6 +4,7 @@ import { useUserStore } from '~/stores/user'
 import { type ApiResponse, type UserData } from '~/types'
 
 const { isLogin, authToken } = storeToRefs(useUserStore())
+const { apiBaseUrl } = useApiConfig()
 const { setUserInfo } = useUserStore()
 const router = useRouter()
 const route = useRoute()
@@ -12,7 +13,7 @@ const getUserData = async () => {
     return
   }
   try {
-    const res = await $fetch<ApiResponse<UserData>>('http://localhost:8080/api/userInfo', {
+    const res = await $fetch<ApiResponse<UserData>>(`${apiBaseUrl}/userInfo`, {
       method: 'POST',
       headers: {
         Authorization: authToken.value
