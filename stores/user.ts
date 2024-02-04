@@ -3,40 +3,38 @@ import { type UserData } from '~/types'
 export const useUserStore = defineStore(
   'user',
   () => {
-    const runtimeConfig = useRuntimeConfig()
-    const apiBaseUrl = runtimeConfig.public.apiBaseUrl
+    const router = useRouter()
+    const authToken = useCookie('token')
     const isLogin = ref(false)
-    const userInfo = reactive({
+    const userInfo = ref({
       userName: '',
-      userEmail: '',
-      userId: '',
+      email: '',
+      id: '',
       thumbnail: ''
     })
     const setUserInfo = (user: UserData) => {
-      userInfo.userName = user.userName
-      userInfo.userEmail = user.userEmail
-      userInfo.userId = user.userId
-      userInfo.thumbnail = user.thumbnail
+      userInfo.value = { ...user }
     }
 
     const logout = () => {
-      try {
-        const res = $fetch(`${apiBaseUrl}/logout`)
-        console.log(res)
-      } catch (error) {
-        console.error(error)
-      }
+      isLogin.value = false
+      userInfo.value = { userName: '', email: '', id: '', thumbnail: '' }
+      authToken.value = null
+      router.push('/')
     }
 
     return {
       userInfo,
       isLogin,
+      authToken,
       setUserInfo,
       logout
     }
   },
   {
-    persist: true
+    persist: {
+      paths: ['isLogin', 'userInfo']
+    }
   }
 )
 

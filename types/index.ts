@@ -1,6 +1,12 @@
 export interface UserData {
   userName: string
-  userEmail: string
-  userId: string
+  email: string
+  id: string
   thumbnail: string
+}
+
+export interface ApiResponse<T> {
+  token?: string
+  data: T
+  ok: boolean
 }

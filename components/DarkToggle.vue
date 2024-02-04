@@ -7,11 +7,12 @@ function toggleColorMode() {
 </script>
 
 <template>
-  <button type="button" class="inline-block" @click="toggleColorMode">
-    <Icon v-if="color.value === 'light'" name="pixelarticons:sun" size="24" />
-
-    <Icon v-else name="pixelarticons:moon" size="24" />
-  </button>
+  <ClientOnly>
+    <button type="button" @click="toggleColorMode">
+      <Icon v-if="color.value === 'dark'" name="ri:moon-line" size="24" />
+      <Icon v-else name="ri:sun-line" size="24" />
+    </button>
+  </ClientOnly>
 </template>
 
 <style scoped></style>

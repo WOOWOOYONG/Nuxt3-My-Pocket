@@ -1,39 +1,37 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
-import { type UserData } from '~/types'
+import { type ApiResponse, type UserData } from '~/types'
 
-const { userInfo, isLogin } = storeToRefs(useUserStore())
-// const router = useRouter()
-// const { data, error } = await useFetch<UserData>('http://localhost:8080/api/userInfo', {
-//   method: 'POST'
-// })
-// if(data.value){
-//   console.log(data.value)
-//   userInfo.value = data.value
-//   isLogin.value = true
-//   router.push('/')
-// }
-// if(error.value){
-//   console.error(error.value)
-// }
-
+const { isLogin, authToken } = storeToRefs(useUserStore())
+const { setUserInfo } = useUserStore()
+const router = useRouter()
+const route = useRoute()
 const getUserData = async () => {
+  if (!authToken.value) {
+    return
+  }
   try {
-    const response = await fetch('http://localhost:8080/api/userInfo', {
+    const res = await $fetch<ApiResponse<UserData>>('http://localhost:8080/api/userInfo', {
       method: 'POST',
-      credentials: 'include'
+      headers: {
+        Authorization: authToken.value
+      }
     })
-    const userData: UserData = await response.json()
-    userInfo.value = userData
-    isLogin.value = true
-    console.log(userData)
+    if (res.ok) {
+      setUserInfo(res.data)
+      isLogin.value = true
+      router.push('/')
+    }
   } catch (error) {
     console.error(error)
   }
 }
 
-onMounted(getUserData)
+onMounted(() => {
+  authToken.value = `Bearer ${route.query.token}` as string
+  getUserData()
+})
 </script>
 
 <template>
