@@ -7,17 +7,19 @@ const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
 const apiBaseUrl = runtimeConfig.public.apiBaseUrl
 const { isLogin, authToken } = storeToRefs(useUserStore())
-const { setUserInfo } = useUserStore()
+
 definePageMeta({
   layout: 'signin'
 })
 
+const userName = ref('')
 const email = ref('')
 const password = ref('')
+const checkPassword = ref('')
 
-const login = async () => {
+const signup = async () => {
   try {
-    const res = await $fetch<ApiResponse<UserData>>(`${apiBaseUrl}/login`, {
+    const res = await $fetch<ApiResponse<UserData>>(`${apiBaseUrl}/signup`, {
       method: 'POST',
       body: {
         email: email.value,
@@ -25,10 +27,10 @@ const login = async () => {
       }
     })
     if (res.ok) {
-      setUserInfo(res.data)
+      alert('註冊成功')
       authToken.value = `Bearer ${res.token}`
       isLogin.value = true
-      router.push('/')
+      router.push('/login')
     }
   } catch (error) {
     console.error(error)
@@ -45,15 +47,21 @@ onMounted(() => {
   <form class="mb-4">
     <div class="relative mb-2">
       <span class="input-icon"
-        ><Icon name="material-symbols:mail-outline" size="20" class="text-stone-500"
+        ><Icon name="material-symbols:person-2-outline" size="20" class="text-stone-500"
       /></span>
       <input
         ref="firstInput"
-        v-model="email"
+        v-model="userName"
         type="email"
         class="base-input"
-        placeholder="電子郵件"
+        placeholder="使用者名稱"
       />
+    </div>
+    <div class="relative mb-2">
+      <span class="input-icon"
+        ><Icon name="material-symbols:mail-outline" size="20" class="text-stone-500"
+      /></span>
+      <input v-model="email" type="email" class="base-input" placeholder="電子郵件" />
     </div>
     <div class="relative mb-2">
       <span class="input-icon"
@@ -61,12 +69,23 @@ onMounted(() => {
       /></span>
       <input v-model="password" type="password" class="base-input" placeholder="密碼" />
     </div>
+    <div class="relative mb-2">
+      <span class="input-icon"
+        ><Icon name="material-symbols:lock-outline" size="20" class="text-stone-500"
+      /></span>
+      <input
+        v-model="checkPassword"
+        type="password"
+        class="base-input"
+        placeholder="再次輸入密碼"
+      />
+    </div>
     <button
       class="mt-5 block w-full rounded-md border border-gray-500 bg-stone-500 py-2 text-gray-100 transition-colors hover:bg-stone-600"
       type="button"
-      @click="login"
+      @click="signup"
     >
-      登入
+      註冊
     </button>
   </form>
 </template>
