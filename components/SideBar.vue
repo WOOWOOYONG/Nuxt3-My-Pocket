@@ -10,7 +10,7 @@ const menuList = [
   },
   {
     name: '儲存標籤',
-    link: '/',
+    link: '/saved',
     icon: 'material-symbols:bookmark-outline'
   },
   {
@@ -29,7 +29,7 @@ const toggleUserDropdown = () => {
 </script>
 
 <template>
-  <div>
+  <div class="fixed top-[120px]">
     <div
       v-if="isLogin"
       class="relative mb-8 cursor-pointer rounded-full p-2 hover:bg-sand-600"

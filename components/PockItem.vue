@@ -96,7 +96,7 @@ const handleDeletPocket = (pocketId: string) => {
             class="flex w-36 items-center justify-center gap-2 py-3 pr-1"
             @click="handleDeletPocket(pocket._id)"
           >
-            <Icon name="material-symbols-light:delete-outline-rounded" size="24" />刪除Pocket
+            <Icon name="material-symbols:delete-outline" size="20" />刪除Pocket
           </button>
         </div>
       </div>
