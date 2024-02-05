@@ -16,7 +16,7 @@ const categories = {
 }
 
 defineProps<{ pocket: Pocket }>()
-const emits = defineEmits(['pocket-updated'])
+const emits = defineEmits(['pocket-updated', 'pocket-edit-id'])
 
 const togglePocketStatus = async (pocketId: string) => {
   try {
@@ -75,10 +75,14 @@ const handleDeletPocket = (pocketId: string) => {
   showDeleteBtnId.value = null
   deletePocket(pocketId)
 }
+
+const getEditPocketId = (pocketId: string) => {
+  emits('pocket-edit-id', pocketId)
+}
 </script>
 
 <template>
-  <div class="rounded border border-gray-700">
+  <div class="rounded border-b border-stone-400">
     <header class="flex justify-end">
       <div class="mr-4">
         {{ formatDateString(pocket.createdAt) }}
@@ -89,7 +93,7 @@ const handleDeletPocket = (pocketId: string) => {
         </button>
         <div
           v-if="showDeleteBtnId === pocket._id"
-          class="absolute -left-8 cursor-pointer rounded-lg bg-sand-200 shadow hover:text-red-600"
+          class="absolute -left-8 cursor-pointer rounded-lg border border-sand-500 bg-sand-200 shadow hover:text-red-600"
         >
           <button
             type="button"
@@ -114,32 +118,47 @@ const handleDeletPocket = (pocketId: string) => {
     <p v-if="pocket.memo.length > 0">
       {{ pocket.memo }}
     </p>
-    <footer class="mb-4 flex justify-end">
-      <div class="mr-4">
-        <button v-if="pocket.status" type="button" @click="togglePocketStatus(pocket._id)">
-          <Icon name="material-symbols:flag-rounded" size="26" />
-        </button>
-        <button v-else type="button" @click="togglePocketStatus(pocket._id)">
-          <Icon name="material-symbols:flag-outline-rounded" size="26" />
+    <footer class="mb-4 flex justify-between">
+      <div class="ml-4">
+        <button type="button" @click="getEditPocketId(pocket._id)">
+          <Icon name="ph:pencil-simple-line" size="26" />
         </button>
       </div>
-      <div class="mr-4">
-        <button
-          v-if="pocket.collect"
-          type="button"
-          class="cursor-pointer"
-          @click="togglePocketCollected(pocket._id)"
-        >
-          <Icon name="material-symbols:bookmark-rounded" size="26" />
-        </button>
-        <button
-          v-else
-          type="button"
-          class="cursor-pointer"
-          @click="togglePocketCollected(pocket._id)"
-        >
-          <Icon name="material-symbols:bookmark-outline-rounded" size="26" />
-        </button>
+      <div class="flex">
+        <div class="mr-4">
+          <button v-if="pocket.status" type="button" @click="togglePocketStatus(pocket._id)">
+            <Icon name="material-symbols:flag-rounded" size="26" />
+          </button>
+          <button v-else type="button" @click="togglePocketStatus(pocket._id)">
+            <Icon
+              name="material-symbols:flag-outline-rounded"
+              class="hover:text-sand-900"
+              size="26"
+            />
+          </button>
+        </div>
+        <div class="mr-4">
+          <button
+            v-if="pocket.collect"
+            type="button"
+            class="cursor-pointer"
+            @click="togglePocketCollected(pocket._id)"
+          >
+            <Icon name="material-symbols:bookmark-rounded" size="26" />
+          </button>
+          <button
+            v-else
+            type="button"
+            class="cursor-pointer"
+            @click="togglePocketCollected(pocket._id)"
+          >
+            <Icon
+              name="material-symbols:bookmark-outline-rounded"
+              size="26"
+              class="hover:text-sand-900"
+            />
+          </button>
+        </div>
       </div>
     </footer>
   </div>

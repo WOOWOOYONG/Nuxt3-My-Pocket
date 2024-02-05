@@ -9,7 +9,7 @@ const menuList = [
     icon: 'material-symbols:home-outline'
   },
   {
-    name: '儲存標籤',
+    name: '我的收藏',
     link: '/saved',
     icon: 'material-symbols:bookmark-outline'
   },

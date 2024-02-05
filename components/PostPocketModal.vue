@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
 import { type ApiResponse, type Pocket } from '~/types'
 
-defineProps<{ showPostModal: boolean }>()
 const emits = defineEmits(['close-modal', 'pocket-updated'])
 const { apiBaseUrl } = useApiConfig()
 const { authToken } = storeToRefs(useUserStore())
@@ -27,9 +26,13 @@ const removeTarget = (targetId: string) => {
   targets.value = targets.value.filter((target) => target.temporyId !== targetId)
 }
 
+const postRegion = ref('北區')
+const selectRegion = (region: string) => {
+  postRegion.value = region
+}
+
 const postData = ref<Partial<Pocket>>({
   shopName: '',
-  region: '北區',
   category: 'tw',
   memo: ''
 })
@@ -47,6 +50,7 @@ const addPocketItem = async () => {
       },
       body: {
         ...postData.value,
+        region: postRegion.value,
         targets: postTargets
       }
     })
@@ -58,7 +62,7 @@ const addPocketItem = async () => {
     console.error(error)
   }
 }
-const handleAddPocket = async () => {
+const handleEditPocket = async () => {
   await addPocketItem()
   emits('close-modal', false)
 }
@@ -77,9 +81,27 @@ const handleAddPocket = async () => {
           <Icon name="ri:close-line" size="26" />
         </span>
         <ul class="flex gap-4">
-          <li class="cursor-pointer text-xl">北區</li>
-          <li class="cursor-pointer text-xl">中區</li>
-          <li class="cursor-pointer text-xl">南區</li>
+          <li
+            class="cursor-pointer rounded-lg bg-slate-300 px-3 py-2 text-xl"
+            :class="{ 'bg-slate-700 text-gray-50': postRegion === '北區' }"
+            @click="selectRegion('北區')"
+          >
+            北區
+          </li>
+          <li
+            class="cursor-pointer rounded-lg bg-slate-300 px-3 py-2 text-xl"
+            :class="{ 'bg-slate-800 text-gray-50': postRegion === '中區' }"
+            @click="selectRegion('中區')"
+          >
+            中區
+          </li>
+          <li
+            class="cursor-pointer rounded-lg bg-slate-300 px-3 py-2 text-xl"
+            :class="{ 'bg-slate-800 text-gray-50': postRegion === '南區' }"
+            @click="selectRegion('南區')"
+          >
+            南區
+          </li>
         </ul>
       </div>
       <form class="flex flex-col items-start gap-3">
@@ -121,7 +143,7 @@ const handleAddPocket = async () => {
               <input v-model.number="target.price" type="number" class="base-input" />
             </div>
             <button type="button" @click="removeTarget(target.temporyId)">
-              <Icon name="ic:outline-remove-circle-outline" size="24" />
+              <Icon name="ic:outline-remove-circle-outline" size="24" class="text-red-600" />
             </button>
           </div>
           <button type="button" class="mt-4 cursor-pointer" @click="addTarget">
@@ -144,7 +166,7 @@ const handleAddPocket = async () => {
           ></textarea>
         </div>
         <div class="mt-2 flex w-full justify-end">
-          <button type="button" class="base-btn" @click="handleAddPocket">POST</button>
+          <button type="button" class="base-btn" @click="handleEditPocket">POST</button>
         </div>
       </form>
     </div>

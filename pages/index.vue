@@ -15,6 +15,11 @@ const handleClosePostModal = (value: boolean) => {
   showPostModal.value = value
 }
 
+const showEditModal = ref(false)
+const handleCloseEditModal = (value: boolean) => {
+  showEditModal.value = value
+}
+
 const showPocketStatus = ref(false)
 const setShowStatus = (status: boolean) => {
   showPocketStatus.value = status
@@ -63,26 +68,63 @@ const filteredPocketList = computed(() => {
     return pocketList.value?.data.filter((pocket: Pocket) => pocket.status === false)
   }
 })
+
+const editPocketItem = ref<null | Pocket>(null)
+const handleEditPocket = (pocketId: string) => {
+  if (pocketList.value?.data) {
+    const foundPocket = pocketList.value.data.find((item) => item._id === pocketId)
+    if (foundPocket) {
+      editPocketItem.value = foundPocket
+      showEditModal.value = true
+    }
+  }
+}
 </script>
 
 <template>
-  <div class="max-w-[60%] flex-grow">
-    <div class="mb-10 flex items-center gap-6">
-      <div class="text-xl" @click="setShowStatus(false)">待冒險</div>
-      <div class="text-xl" @click="setShowStatus(true)">已探勘</div>
+  <div class="flex-grow sm:max-w-[60%]">
+    <div class="mb-10 flex items-center gap-2">
+      <div
+        class="w-1/2 cursor-pointer rounded-lg py-4 text-xl transition-colors hover:bg-sand-600"
+        @click="setShowStatus(false)"
+      >
+        <span :class="{ 'border-b-4 border-sand-800 px-3 pb-2': !showPocketStatus }">
+          <Icon name="material-symbols-light:mountain-flag-outline" size="28" class="pb-1" />
+          待冒險
+        </span>
+      </div>
+      <div
+        class="w-1/2 cursor-pointer rounded-lg py-4 text-xl transition-colors hover:bg-sand-600"
+        @click="setShowStatus(true)"
+      >
+        <span :class="{ 'border-b-4 border-sand-800 px-3 pb-2': showPocketStatus }">
+          <Icon name="material-symbols-light:mountain-flag-rounded" size="28" class="pb-1" />
+          已探勘
+        </span>
+      </div>
     </div>
     <div class="mb-6 cursor-pointer border border-black py-3 text-xl" @click="togglePostModal">
       新增探險地點
     </div>
-    <ul v-if="pocketList?.data" class="flex flex-col gap-3">
+    <ul v-if="pocketList?.data" class="flex flex-col gap-3 border border-stone-400">
       <li v-for="pocket in filteredPocketList" :key="pocket._id">
-        <PockItem :pocket="pocket" @pocket-updated="handlePocketRefresh" />
+        <PockItem
+          :pocket="pocket"
+          @pocket-updated="handlePocketRefresh"
+          @pocket-edit-id="handleEditPocket"
+        />
       </li>
     </ul>
-    <PostModal
+    <PostPocketModal
       v-if="showPostModal"
       :show-post-modal="showPostModal"
       @close-modal="handleClosePostModal"
+      @pocket-updated="handlePocketRefresh"
+    />
+    <EditPocketModal
+      v-if="showEditModal"
+      :edit-pocket-item="editPocketItem"
+      @close-modal="handleCloseEditModal"
       @pocket-updated="handlePocketRefresh"
     />
   </div>

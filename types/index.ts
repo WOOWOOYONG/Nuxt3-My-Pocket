@@ -12,7 +12,7 @@ export interface ApiResponse<T> {
   ok: boolean
 }
 
-interface Target {
+export interface Target {
   name: string
   price: number
   _id?: string
