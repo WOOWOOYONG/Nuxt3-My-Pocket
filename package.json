@@ -30,5 +30,8 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.2.2",
     "vue-tsc": "^1.6.5"
+  },
+  "dependencies": {
+    "nanoid": "^5.0.5"
   }
 }

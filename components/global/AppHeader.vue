@@ -11,12 +11,12 @@ const toggleUserDropdown = () => {
 </script>
 
 <template>
-  <header class="bg-stone-300 py-3 dark:bg-gray-900">
-    <nav class="container">
+  <header class="py-4">
+    <nav class="container px-3">
       <div class="flex items-center justify-between">
         <NuxtLink to="/"> LOGO </NuxtLink>
         <div class="flex items-center gap-3">
-          <div v-if="isLogin" class="relative cursor-pointer" @click="toggleUserDropdown">
+          <div v-if="isLogin" class="relative cursor-pointer sm:hidden" @click="toggleUserDropdown">
             <img :src="userInfo.thumbnail" class="h-10 w-10 rounded-full" />
             <!-- Dropdown menu -->
             <div
@@ -46,7 +46,12 @@ const toggleUserDropdown = () => {
             </div>
           </div>
           <div v-else>
-            <NuxtLink to="/login" class="mr-4 font-medium"> 開始使用 </NuxtLink>
+            <NuxtLink
+              to="/login"
+              class="mr-4 rounded-full bg-sand-900 px-4 py-2 tracking-wider text-gray-100 shadow-sm transition-colors hover:bg-gray-800"
+            >
+              開始使用
+            </NuxtLink>
           </div>
           <div>
             <LangSwitcher />

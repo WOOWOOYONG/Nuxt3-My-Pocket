@@ -4,8 +4,7 @@ import { useUserStore } from '~/stores/user'
 import { type UserData, type ApiResponse } from '~/types'
 
 const router = useRouter()
-const runtimeConfig = useRuntimeConfig()
-const apiBaseUrl = runtimeConfig.public.apiBaseUrl
+const { apiBaseUrl } = useApiConfig()
 const { isLogin, authToken } = storeToRefs(useUserStore())
 const { setUserInfo } = useUserStore()
 definePageMeta({
@@ -26,7 +25,7 @@ const login = async () => {
     })
     if (res.ok) {
       setUserInfo(res.data)
-      authToken.value = `Bearer ${res.token}`
+      authToken.value = res.token
       isLogin.value = true
       router.push('/')
     }
@@ -42,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <form class="mb-4">
+  <form class="mb-4" @keypress.enter="login">
     <div class="relative mb-2">
       <span class="input-icon"
         ><Icon name="material-symbols:mail-outline" size="20" class="text-stone-500"
@@ -51,7 +50,7 @@ onMounted(() => {
         ref="firstInput"
         v-model="email"
         type="email"
-        class="base-input"
+        class="base-input pl-8"
         placeholder="電子郵件"
       />
     </div>
@@ -59,7 +58,7 @@ onMounted(() => {
       <span class="input-icon"
         ><Icon name="material-symbols:lock-outline" size="20" class="text-stone-500"
       /></span>
-      <input v-model="password" type="password" class="base-input" placeholder="密碼" />
+      <input v-model="password" type="password" class="base-input pl-8" placeholder="密碼" />
     </div>
     <button
       class="mt-5 block w-full rounded-md border border-gray-500 bg-stone-500 py-2 text-gray-100 transition-colors hover:bg-stone-600"

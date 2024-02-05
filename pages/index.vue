@@ -1,45 +1,11 @@
 <script lang="ts" setup>
-const restaurants = ref([
-  {
-    name: '麥當勞',
-    id: '1',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  },
-  {
-    name: '麥當勞',
-    id: '2',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  },
-  {
-    name: '麥當勞',
-    id: '3',
-    cover: 'https://fakeimg.pl/400x200/',
-    category: '速食',
-    tags: ['新竹美食', '薯條']
-  }
-])
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '~/stores/user'
+import { useUiStore } from '~/stores/uiStore'
+import { type ApiResponse, type Pocket } from '~/types'
 
-const menuList = [
-  {
-    name: '首頁',
-    link: '/',
-    icon: 'material-symbols:home-outline'
-  },
-  {
-    name: '儲存標籤',
-    link: '/',
-    icon: 'material-symbols:bookmark-outline'
-  },
-  {
-    name: '設定',
-    link: '/',
-    icon: 'material-symbols:settings-outline'
-  }
-]
+const { authToken } = storeToRefs(useUserStore())
+const { apiBaseUrl } = useApiConfig()
 
 const showPostModal = ref(false)
 const togglePostModal = () => {
@@ -48,41 +14,118 @@ const togglePostModal = () => {
 const handleClosePostModal = (value: boolean) => {
   showPostModal.value = value
 }
+
+const showEditModal = ref(false)
+const handleCloseEditModal = (value: boolean) => {
+  showEditModal.value = value
+}
+
+const showPocketStatus = ref(false)
+const setShowStatus = (status: boolean) => {
+  showPocketStatus.value = status
+}
+
+const { showDeleteBtnId } = storeToRefs(useUiStore())
+
+onMounted(() => {
+  const closeDeleteMenu = (event: MouseEvent) => {
+    if (!(event.target as Element).closest('.delete-button')) {
+      showDeleteBtnId.value = null
+    }
+  }
+
+  window.addEventListener('click', closeDeleteMenu)
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('click', closeDeleteMenu)
+  })
+})
+
+const {
+  data: pocketList,
+  error,
+  refresh
+} = await useFetch<ApiResponse<Pocket[]>>(`${apiBaseUrl}/pockets`, {
+  headers: {
+    Authorization: `Bearer ${authToken.value}`
+  }
+})
+
+if (error.value) {
+  console.error(error.value)
+}
+
+const handlePocketRefresh = (value: boolean) => {
+  if (value) {
+    refresh()
+  }
+}
+
+const filteredPocketList = computed(() => {
+  if (showPocketStatus.value) {
+    return pocketList.value?.data.filter((pocket: Pocket) => pocket.status === true)
+  } else {
+    return pocketList.value?.data.filter((pocket: Pocket) => pocket.status === false)
+  }
+})
+
+const editPocketItem = ref<null | Pocket>(null)
+const handleEditPocket = (pocketId: string) => {
+  if (pocketList.value?.data) {
+    const foundPocket = pocketList.value.data.find((item) => item._id === pocketId)
+    if (foundPocket) {
+      editPocketItem.value = foundPocket
+      showEditModal.value = true
+    }
+  }
+}
 </script>
 
 <template>
-  <div>
-    <h1 class="mb-10 text-4xl font-bold">My Pocket</h1>
-    <section class="flex">
-      <div class="min-w-[20%] pr-10">
-        <ul class="flex flex-col gap-2">
-          <li v-for="(menu, index) in menuList" :key="index">
-            <NuxtLink :to="menu.link" class="flex items-start border border-black p-3">
-              <Icon :name="menu.icon" size="24" class="mr-3" />
-              <span>{{ menu.name }}</span></NuxtLink
-            >
-          </li>
-        </ul>
+  <div class="flex-grow sm:max-w-[60%]">
+    <div class="mb-10 flex items-center gap-2">
+      <div
+        class="w-1/2 cursor-pointer rounded-lg py-4 text-xl transition-colors hover:bg-sand-600"
+        @click="setShowStatus(false)"
+      >
+        <span :class="{ 'border-b-4 border-sand-800 px-3 pb-2': !showPocketStatus }">
+          <Icon name="material-symbols-light:mountain-flag-outline" size="28" class="pb-1" />
+          待冒險
+        </span>
       </div>
-      <div class="max-w-[60%] flex-grow">
-        <div class="mb-10 flex items-center gap-6">
-          <div class="text-xl">待冒險</div>
-          <div class="text-xl">已探勘</div>
-        </div>
-        <div class="mb-6 cursor-pointer border border-black py-3 text-xl" @click="togglePostModal">
-          新增探險地點
-        </div>
-        <ul class="flex flex-col gap-3">
-          <li v-for="restaurant in restaurants" :key="restaurant.id">
-            <PockItem :restaurant="restaurant" />
-          </li>
-        </ul>
+      <div
+        class="w-1/2 cursor-pointer rounded-lg py-4 text-xl transition-colors hover:bg-sand-600"
+        @click="setShowStatus(true)"
+      >
+        <span :class="{ 'border-b-4 border-sand-800 px-3 pb-2': showPocketStatus }">
+          <Icon name="material-symbols-light:mountain-flag-rounded" size="28" class="pb-1" />
+          已探勘
+        </span>
       </div>
-    </section>
-    <PostModal
+    </div>
+    <div class="mb-6 cursor-pointer border border-black py-3 text-xl" @click="togglePostModal">
+      新增探險地點
+    </div>
+    <ul v-if="pocketList?.data" class="flex flex-col gap-3 border border-stone-400">
+      <li v-for="pocket in filteredPocketList" :key="pocket._id">
+        <PockItem
+          :pocket="pocket"
+          @pocket-updated="handlePocketRefresh"
+          @pocket-edit-id="handleEditPocket"
+        />
+      </li>
+    </ul>
+    <PostPocketModal
       v-if="showPostModal"
       :show-post-modal="showPostModal"
       @close-modal="handleClosePostModal"
+      @pocket-updated="handlePocketRefresh"
+    />
+    <EditPocketModal
+      v-if="showEditModal"
+      :edit-pocket-item="editPocketItem"
+      @close-modal="handleCloseEditModal"
+      @pocket-updated="handlePocketRefresh"
     />
   </div>
 </template>
