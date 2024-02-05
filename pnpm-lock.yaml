@@ -14,6 +14,7 @@ specifiers:
   eslint-config-prettier: ^8.8.0
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-vue: ^9.14.1
+  nanoid: ^5.0.5
   nuxt: ^3.10.0
   nuxt-icon: ^0.5.0
   prettier: ^2.8.8
@@ -21,6 +22,9 @@ specifiers:
   tailwindcss: ^3.3.3
   typescript: ^5.2.2
   vue-tsc: ^1.6.5
+
+dependencies:
+  nanoid: 5.0.5
 
 devDependencies:
   '@iconify/vue': 4.1.1
@@ -1539,6 +1543,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     dev: true
     bundledDependencies:
       - napi-wasm
@@ -5733,6 +5738,16 @@ packages:
     resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
+    dev: true
+
+  /nanoid/5.0.5:
+    resolution: {integrity: sha512-/Veqm+QKsyMY3kqi4faWplnY1u+VuKO3dD2binyPIybP31DRO29bPF+1mszgLnrR2KqSLceFLBNw0zmvDzN1QQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    dev: false
+
+  /napi-wasm/1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
     dev: true
 
   /natural-compare/1.4.0:

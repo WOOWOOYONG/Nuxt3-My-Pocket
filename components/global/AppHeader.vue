@@ -12,7 +12,7 @@ const toggleUserDropdown = () => {
 
 <template>
   <header class="py-4">
-    <nav class="container">
+    <nav class="container px-3">
       <div class="flex items-center justify-between">
         <NuxtLink to="/"> LOGO </NuxtLink>
         <div class="flex items-center gap-3">
@@ -48,7 +48,7 @@ const toggleUserDropdown = () => {
           <div v-else>
             <NuxtLink
               to="/login"
-              class="mr-4 rounded-full bg-sand-800 px-4 py-2 tracking-wider text-gray-100 shadow-sm transition-colors hover:bg-gray-800"
+              class="mr-4 rounded-full bg-sand-900 px-4 py-2 tracking-wider text-gray-100 shadow-sm transition-colors hover:bg-gray-800"
             >
               開始使用
             </NuxtLink>

@@ -4,7 +4,7 @@
   <div class="flex min-h-screen flex-col">
     <AppHeader />
     <main class="grow py-16 text-center">
-      <div class="container">
+      <div class="container px-3">
         <section>
           <div class="mx-auto max-w-sm">
             <h2 class="mb-14 text-4xl font-bold">My Pocket</h2>

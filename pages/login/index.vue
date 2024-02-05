@@ -41,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <form class="mb-4">
+  <form class="mb-4" @keypress.enter="login">
     <div class="relative mb-2">
       <span class="input-icon"
         ><Icon name="material-symbols:mail-outline" size="20" class="text-stone-500"
