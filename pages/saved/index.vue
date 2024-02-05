@@ -27,7 +27,7 @@ const handlePocketRefresh = (value: boolean) => {
 }
 </script>
 <template>
-  <div class="max-w-[60%] flex-grow">
+  <div>
     <ul v-if="pocketList?.data" class="flex flex-col gap-3">
       <li v-for="pocket in pocketList.data" :key="pocket._id">
         <PockItem :pocket="pocket" @pocket-updated="handlePocketRefresh" />

@@ -77,30 +77,38 @@ const handleDeletPocket = (pocketId: string) => {
 }
 
 const getEditPocketId = (pocketId: string) => {
+  showDeleteBtnId.value = null
   emits('pocket-edit-id', pocketId)
 }
 </script>
 
 <template>
   <div class="rounded border-b border-stone-400">
-    <header class="flex justify-end">
-      <div class="mr-4">
+    <header class="flex items-center justify-between px-4 pt-4">
+      <div>
         {{ formatDateString(pocket.createdAt) }}
       </div>
-      <div class="delete-btn relative mr-4">
+      <div class="delete-btn relative">
         <button type="button" class="cursor-pointer" @click.stop="toggleDeleteBtn(pocket._id)">
-          <Icon name="ri:more-fill" size="20" />
+          <Icon name="ri:more-fill" size="24" />
         </button>
         <div
           v-if="showDeleteBtnId === pocket._id"
-          class="absolute -left-8 cursor-pointer rounded-lg border border-sand-500 bg-sand-200 shadow hover:text-red-600"
+          class="absolute -left-8 cursor-pointer rounded-lg border border-sand-600 bg-sand-200 shadow"
         >
           <button
             type="button"
-            class="flex w-36 items-center justify-center gap-2 py-3 pr-1"
+            class="flex w-32 items-center justify-center gap-2 border-b border-sand-600 py-2 pr-1 hover:bg-stone-300"
+            @click="getEditPocketId(pocket._id)"
+          >
+            <Icon name="ph:pencil-simple-line" size="20" />編輯
+          </button>
+          <button
+            type="button"
+            class="flex w-32 items-center justify-center gap-2 py-2 pr-1 hover:bg-stone-300 hover:text-red-600"
             @click="handleDeletPocket(pocket._id)"
           >
-            <Icon name="material-symbols:delete-outline" size="20" />刪除Pocket
+            <Icon name="material-symbols:delete-outline" size="20" />刪除
           </button>
         </div>
       </div>
@@ -118,12 +126,7 @@ const getEditPocketId = (pocketId: string) => {
     <p v-if="pocket.memo.length > 0">
       {{ pocket.memo }}
     </p>
-    <footer class="mb-4 flex justify-between">
-      <div class="ml-4">
-        <button type="button" @click="getEditPocketId(pocket._id)">
-          <Icon name="ph:pencil-simple-line" size="26" />
-        </button>
-      </div>
+    <footer class="mb-4 flex justify-end">
       <div class="flex">
         <div class="mr-4">
           <button v-if="pocket.status" type="button" @click="togglePocketStatus(pocket._id)">

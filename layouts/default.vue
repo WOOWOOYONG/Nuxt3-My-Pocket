@@ -1,14 +1,16 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <AppHeader />
-    <main class="grow px-3 py-16 text-center">
+    <main class="grow px-3 pb-16 pt-8 text-center">
       <div class="container">
-        <h1 class="mb-4 text-4xl font-bold">My Pocket</h1>
-        <section class="flex">
-          <div class="hidden min-w-[20%] pr-10 sm:block">
+        <section class="grid-cols-12 sm:grid">
+          <div class="col-span-3 hidden pr-16 sm:block">
             <SideBar />
           </div>
-          <slot />
+          <div class="col-span-6">
+            <h1 class="mb-8 text-4xl font-bold">My Pocket</h1>
+            <slot />
+          </div>
         </section>
       </div>
     </main>
