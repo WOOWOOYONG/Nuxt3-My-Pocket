@@ -107,7 +107,7 @@ const handleEditPocket = (pocketId: string) => {
     <div class="mb-6 cursor-pointer border border-black py-3 text-xl" @click="togglePostModal">
       新增探險地點
     </div>
-    <ul v-if="pocketList!.data" class="flex flex-col gap-3 border border-stone-400">
+    <ul v-if="pocketList?.data" class="flex flex-col gap-3 border border-stone-400">
       <li v-for="pocket in filteredPocketList" :key="pocket._id">
         <PockItem
           :pocket="pocket"

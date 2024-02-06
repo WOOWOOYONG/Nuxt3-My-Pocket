@@ -20,7 +20,7 @@ export const useUserStore = defineStore(
       isLogin.value = false
       userInfo.value = { userName: '', email: '', id: '', thumbnail: '' }
       authToken.value = null
-      router.push('/')
+      router.push('/login')
     }
 
     return {
