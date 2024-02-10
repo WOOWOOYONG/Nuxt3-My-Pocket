@@ -13,7 +13,7 @@ definePageMeta({
 
 const validationSchema = toTypedSchema(
   zod.object({
-    userName: zod.string().min(3, { message: '最少需要3個字元' }).max(50),
+    userName: zod.string().min(3, { message: '最少需要3個字元' }).max(20),
     email: zod.string().email({ message: '請輸入有效的電子郵件' }),
     password: zod.string().regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/, {
       message: '請輸入 8 位以上大小寫英數字組合'
@@ -71,11 +71,11 @@ onMounted(() => {
         type="text"
         class="base-input pl-8"
         placeholder="使用者名稱"
-        maxlength="50"
+        maxlength="20"
         :class="{ 'focus:border-red-500': errors.userName }"
       />
     </div>
-    <span v-if="errors.userName" class="mb-2 inline-block w-full pl-8 text-left text-red-600">{{
+    <span v-if="errors.userName" class="mb-2 block w-full pl-8 text-left text-red-600">{{
       errors.userName
     }}</span>
     <div class="relative mb-2">
@@ -91,7 +91,7 @@ onMounted(() => {
         :class="{ 'focus:border-red-500': errors.email }"
       />
     </div>
-    <span v-if="errors.email" class="mb-2 inline-block w-full pl-8 text-left text-red-600">{{
+    <span v-if="errors.email" class="mb-2 block w-full pl-8 text-left text-red-600">{{
       errors.email
     }}</span>
     <div class="relative mb-2">
@@ -107,7 +107,7 @@ onMounted(() => {
         :class="{ 'focus:border-red-500': errors.password }"
       />
     </div>
-    <span v-if="errors.password" class="mb-2 inline-block w-full pl-8 text-left text-red-600">{{
+    <span v-if="errors.password" class="mb-2 block w-full pl-8 text-left text-red-600">{{
       errors.password
     }}</span>
     <button

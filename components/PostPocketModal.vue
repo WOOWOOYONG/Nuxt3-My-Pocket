@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useField, useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as zod from 'zod'
 import { nanoid } from 'nanoid'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
@@ -37,6 +40,22 @@ const postData = ref<Partial<Pocket>>({
   memo: ''
 })
 
+const validationSchema = toTypedSchema(
+  zod.object({
+    shopName: zod.string().min(1, { message: '此為必填欄位' }).max(20)
+  })
+)
+
+const isValidTargets = targets.value.some((target) => target.name.trim() !== '' && target.price > 0)
+
+const targetsError = ref('')
+
+const { handleSubmit, errors } = useForm({
+  validationSchema
+})
+
+const { value: shopName } = useField('shopName')
+
 const addPocketItem = async () => {
   if (!authToken.value) {
     return
@@ -62,10 +81,14 @@ const addPocketItem = async () => {
     console.error(error)
   }
 }
-const handleEditPocket = async () => {
-  await addPocketItem()
-  emits('close-modal', false)
-}
+const onSubmit = handleSubmit((values: any) => {
+  if (!isValidTargets) {
+    targetsError.value = '請至少輸入一個有效的品項'
+    return
+  }
+  console.log(values)
+  targetsError.value = ''
+})
 </script>
 <template>
   <div
@@ -104,29 +127,37 @@ const handleEditPocket = async () => {
           </li>
         </ul>
       </div>
-      <form class="flex flex-col items-start gap-3">
+      <form class="flex flex-col items-start gap-3" @submit="onSubmit">
         <div class="w-full">
-          <label for="name" class="form-label">店舖名稱</label>
+          <label for="shopName" class="form-label">*店舖名稱</label>
           <input
-            id="name"
+            id="shopName"
             ref="shopNameInput"
-            v-model="postData.shopName"
+            v-model="shopName"
+            name="shopName"
             type="text"
             class="base-input"
+            maxlength="20"
             placeholder="店舖名稱"
           />
         </div>
-        <div class="w-full">
-          <label for="category" class="form-label">種類</label>
+        <span v-if="errors.shopName" class="mb-2 block w-full pl-2 text-left text-red-600">{{
+          errors.shopName
+        }}</span>
+        <div class="relative w-full">
+          <label for="category" class="form-label">*種類</label>
           <select id="category" v-model="postData.category" name="category" class="base-select">
             <option value="tw">台式</option>
             <option value="jp">日式</option>
             <option value="cn">中式</option>
             <option value="ita">義式</option>
           </select>
+          <span class="absolute bottom-0 right-3 top-10 flex items-center"
+            ><Icon name="material-symbols:arrow-drop-down-rounded" size="28"
+          /></span>
         </div>
         <div class="w-full">
-          <label for="target" class="form-label">目標品項</label>
+          <label for="target" class="form-label">*目標品項</label>
           <div
             v-for="target in targets"
             :key="target.temporyId"
@@ -153,7 +184,11 @@ const handleEditPocket = async () => {
               class="text-emerald-700"
             />
           </button>
+          <span v-if="targetsError" class="mb-2 block w-full pl-2 text-left text-red-600">
+            {{ targetsError }}
+          </span>
         </div>
+
         <div class="w-full">
           <label for="memo" class="form-label">備忘錄</label>
           <textarea
@@ -166,7 +201,7 @@ const handleEditPocket = async () => {
           ></textarea>
         </div>
         <div class="mt-2 flex w-full justify-end">
-          <button type="button" class="base-btn" @click="handleEditPocket">POST</button>
+          <button type="submit" class="base-btn" @click="onSubmit">POST</button>
         </div>
       </form>
     </div>
