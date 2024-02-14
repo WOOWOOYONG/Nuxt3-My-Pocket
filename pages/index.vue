@@ -71,18 +71,19 @@ const filteredPocketList = computed(() => {
 
 const editPocketItem = ref<null | Pocket>(null)
 const handleEditPocket = (pocketId: string) => {
-  if (pocketList.value?.data) {
-    const foundPocket = pocketList.value.data.find((item) => item._id === pocketId)
-    if (foundPocket) {
-      editPocketItem.value = foundPocket
-      showEditModal.value = true
-    }
+  if (!pocketList.value?.data) {
+    return
+  }
+  const foundPocket = pocketList.value.data.find((item) => item._id === pocketId)
+  if (foundPocket) {
+    editPocketItem.value = foundPocket
+    showEditModal.value = true
   }
 }
 </script>
 
 <template>
-  <div class="flex-grow sm:max-w-[60%]">
+  <div>
     <div class="mb-10 flex items-center gap-2">
       <div
         class="w-1/2 cursor-pointer rounded-lg py-4 text-xl transition-colors hover:bg-sand-600"
@@ -115,6 +116,7 @@ const handleEditPocket = (pocketId: string) => {
         />
       </li>
     </ul>
+    <p v-else class="pt-4 text-2xl">目前還沒有資料</p>
     <PostPocketModal
       v-if="showPostModal"
       :show-post-modal="showPostModal"

@@ -9,14 +9,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL
     }
   },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/color-mode',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    '@vueuse/nuxt',
-    'nuxt-icon'
-  ],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@vueuse/nuxt'],
   components: [
     {
       path: '~/components',

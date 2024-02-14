@@ -15,7 +15,7 @@ const toggleUserDropdown = () => {
     <nav class="container px-3">
       <div class="flex items-center justify-between">
         <NuxtLink to="/"> LOGO </NuxtLink>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-4">
           <div v-if="isLogin" class="relative cursor-pointer sm:hidden" @click="toggleUserDropdown">
             <img :src="userInfo.thumbnail" class="h-10 w-10 rounded-full" />
             <!-- Dropdown menu -->
@@ -52,6 +52,15 @@ const toggleUserDropdown = () => {
             >
               開始使用
             </NuxtLink>
+          </div>
+          <div v-if="isLogin" class="hidden sm:block">
+            <button
+              class="mr-4 rounded-full bg-sand-900 px-6 py-[6px] tracking-wider text-gray-100 shadow-sm transition-colors hover:bg-gray-800"
+              type="button"
+              @click="logout"
+            >
+              登出
+            </button>
           </div>
           <div>
             <LangSwitcher />
